@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function(){
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::get('/test-connection', function(){
@@ -26,3 +27,9 @@ Route::get('/test-connection', function(){
         return "Unable to connect to the database. Error: " . $e->getMessage();
     }
 });
+
+Route::get('/login', [UsersController::class, 'loginForm'])->name('loginForm');
+Route::post('/login', [UsersController::class, 'login'])->name('login');
+Route::get('/register', [UsersController::class, 'registerForm'])->name('registerForm');
+Route::post('/register', [UsersController::class, 'register'])->name('register');
+Route::get('/logout', [UsersController::class, 'logout'])->name('logout');
