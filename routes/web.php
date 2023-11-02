@@ -49,5 +49,6 @@ Route::get('/recipes/delete/{id}', [RecipesController::class, 'delete'])->name('
 Route::delete('/recipes/{id}', [RecipesController::class, 'destroy'])->name('destroy.recipe');
 
 // AJAX routes for ingredients and instructions
+Route::get('/recipelist', [RecipesController::class, 'recipeList']);
 Route::get('/ingredients/{id}', [IngredientsController::class, 'getIngredients'])->name('ingredients');
 Route::get('/instructions/{id}', [InstructionsController::class, 'getInstructions'])->name('instructions');

@@ -11,7 +11,12 @@ class RecipesController extends Controller
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return view('recipes.index', ['recipes' => Recipe::where('user_id', session('user_id'))->get()]);
+        return view('recipes.index');
+    }
+
+    public function recipeList(){
+        $recipes = Recipe::where('user_id', session('userId'))->get();
+        return view('recipes.partials.recipelist', ['recipes' => $recipes]);
     }
 
     public function create(){
