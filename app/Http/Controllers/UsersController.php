@@ -33,11 +33,25 @@ class UsersController extends Controller
     }
 
     public function registerForm(){
+        if(session('userId')){
+            return "logged in with user ".session('userId'); // change
+        }
         return view('users/register');
     }
 
     public function register(Request $request){
-        return "register";
+        if(session('userId')){
+            return "logged in with user ".session('userId'); // change
+        }
+        $validated = $request->validate(User::$registerRules);
+        if(count(User::where('email', $validated['email'])->get()) > 0){
+            $validator = Validator::make($validated, []);
+            $validator->errors()->add('registerError', 'Account already exists');
+            return redirect()->route('registerForm')->withErrors($validator);
+        }
+        User::create($validated);
+        session()->flash('success', 'Account created successfully');
+        return redirect()->route('loginForm');
     }
 
     public function logout(){

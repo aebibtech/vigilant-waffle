@@ -11,7 +11,7 @@
             <div class="col"><input class="form-control" type="text" placeholder="Email" name="email"></div>
         </div>
         <div class="row mb-3">
-            <div class="col"><input class="form-control" type="text" placeholder="Password" name="password"></div>
+            <div class="col"><input class="form-control" type="password" placeholder="Password" name="password"></div>
         </div>
         <div class="d-flex justify-content-between">
             <input class="btn btn-success" type="submit" value="Register">
