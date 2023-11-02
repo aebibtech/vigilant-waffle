@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.users')
 @section('content')
 <div class="d-flex justify-content-center">
     <form class="p-5 bg-light bg-gradient rounded" action="{{ route('register') }}" method="POST">

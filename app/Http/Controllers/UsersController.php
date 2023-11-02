@@ -13,19 +13,21 @@ class UsersController extends Controller
 {
     public function loginForm(){
         if(session('userId')){
-            return "logged in with user ".session('userId'); // change
+            return redirect()->route('recipes');
         }
         return view('users/login');
     }
 
     public function login(Request $request){
         if(session('userId')){
-            return "logged in with user ".session('userId'); // change
+            return redirect()->route('recipes');
         }
         $validated = $request->validate(User::$loginRules);
         if(Auth::attempt($validated)){
-            session(['userId' => User::where('email', $validated['email'])->get()[0]->id]);
-            return "logged in with user ".session('userId'); // change
+            $user = User::where('email', $validated['email'])->get()[0];
+            session(['userId' => $user->id]);
+            session(['username' => $user->name]);
+            return redirect()->route('recipes');
         }
         $validator = Validator::make($validated, []);
         $validator->errors()->add('loginError', 'Invalid email or password');
@@ -34,14 +36,14 @@ class UsersController extends Controller
 
     public function registerForm(){
         if(session('userId')){
-            return "logged in with user ".session('userId'); // change
+            return redirect()->route('recipes');
         }
         return view('users/register');
     }
 
     public function register(Request $request){
         if(session('userId')){
-            return "logged in with user ".session('userId'); // change
+            return redirect()->route('recipes');
         }
         $validated = $request->validate(User::$registerRules);
         if(count(User::where('email', $validated['email'])->get()) > 0){
