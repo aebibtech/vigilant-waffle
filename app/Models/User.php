@@ -54,4 +54,8 @@ class User extends Authenticatable
         'email' => 'required|email',
         'password' => 'required'
     ];
+
+    public function recipes(){
+        return $this->hasMany(Recipe::class);
+    }
 }
