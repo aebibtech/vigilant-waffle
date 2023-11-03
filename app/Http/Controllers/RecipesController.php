@@ -37,7 +37,8 @@ class RecipesController extends Controller
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return view('recipes.view');
+        $recipe = Recipe::findOrFail($id);
+        return view('recipes.view', ['recipe' => $recipe]);
     }
 
     public function edit($id){

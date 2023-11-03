@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RecipesController;
 use App\Http\Controllers\IngredientsController;
-use App\Http\Controllers\InsrructionsController;
+use App\Http\Controllers\InstructionsController;
 
 /*
 |--------------------------------------------------------------------------

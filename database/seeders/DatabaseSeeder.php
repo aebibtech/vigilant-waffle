@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Recipe;
+use App\Models\Ingredient;
+use App\Models\Instruction;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +22,20 @@ class DatabaseSeeder extends Seeder
 
         if(count(Recipe::all()) == 0){
             Recipe::factory(10)->create();
+        }
+
+        if(count(Recipe::all()) > 0){
+            foreach(Recipe::all() as $recipe){
+                for($i = 1; $i <= 3; $i++){
+                    Ingredient::factory()->create([
+                        'recipe_id' => $recipe->id
+                    ]);
+                    Instruction::factory()->create([
+                        'recipe_id' => $recipe->id,
+                        'step_number' => $i
+                    ]);
+                }
+            }
         }
     }
 }
