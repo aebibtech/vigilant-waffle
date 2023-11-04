@@ -19,7 +19,7 @@
             <label for="description">Description</label>
         </div>
         <div class="col col-12 col-sm-12 col-md-6 col-lg-4">
-            <input class="form-control" type="text" name="description" id="description" placeholder="Delicious recipe">
+            <textarea class="form-control" name="description" id="description" placeholder="Delicious recipe" rows="10"></textarea>
         </div>
     </div>
     <div class="row mb-3">

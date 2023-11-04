@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use Illuminate\Support\Facades\Validator;
 
 class RecipesController extends Controller
 {
@@ -26,11 +27,35 @@ class RecipesController extends Controller
         return view('recipes.create');
     }
 
-    public function store(){
+    public function store(Request $request){
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return "store recipe";
+        $bannerImage = $request->file('image');
+        if($bannerImage == NULL){
+            $validator = Validator::make($request->all(), []);
+            $validator->errors()->add('imageError', 'Upload a banner image');
+            return redirect()->route('new.recipe')->withErrors($validator);
+        }
+        // dd($bannerImage->getMimeType());
+        // dd(stripos($bannerImage->getMimeType(), 'image') === false);
+        if(!(stripos($bannerImage->getMimeType(), 'image') === 0) || stripos($bannerImage->getMimeType(), 'image') === false){
+            $validator = Validator::make($request->all(), []);
+            $validator->errors()->add('imageError', 'Upload a valid banner image');
+            return redirect()->route('new.recipe')->withErrors($validator);
+        }
+        $extension = $bannerImage->getClientOriginalExtension();
+        $fileName = str_replace(".$extension", "", $bannerImage->getClientOriginalName());
+        $finalFileName = $fileName.'_'.strtotime("now").".$extension";
+        $destinationPath = 'uploads';
+        $bannerImage->move($destinationPath, $finalFileName);
+        Recipe::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'user_id' => session('userId'),
+            'image' => "/$destinationPath/$finalFileName"
+        ]);
+        return redirect()->route('recipes');
     }
 
     public function show($id){

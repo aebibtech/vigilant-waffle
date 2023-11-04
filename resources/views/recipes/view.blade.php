@@ -9,7 +9,7 @@
         </span>
     </h1>
     <figure>
-        <img class="rounded border border-2 img-fluid" src="{{ $recipe->image }}" alt="{{ $recipe->title }}">
+        <img class="rounded border border-2 img-fluid" src="{{ $recipe->image }}" alt="{{ $recipe->title }}" height="480">
         <figcaption>{{ $recipe->description }}</figcaption>
     </figure>
     <hr>
