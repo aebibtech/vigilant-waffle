@@ -11,6 +11,6 @@ class IngredientsController extends Controller
         if(session('userId') == NULL){
             return "not authorized";
         }
-        return view('ingredients.partials.ingredients', ['ingredients' => Ingredient::where('recipe_id', $id)->get()]);
+        return view('ingredients.partials.list', ['ingredients' => Ingredient::where('recipe_id', $id)->get()]);
     }
 }
