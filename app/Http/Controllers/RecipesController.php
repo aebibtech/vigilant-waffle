@@ -37,8 +37,6 @@ class RecipesController extends Controller
             $validator->errors()->add('imageError', 'Upload a banner image');
             return redirect()->route('new.recipe')->withErrors($validator);
         }
-        // dd($bannerImage->getMimeType());
-        // dd(stripos($bannerImage->getMimeType(), 'image') === false);
         if(!(stripos($bannerImage->getMimeType(), 'image') === 0) || stripos($bannerImage->getMimeType(), 'image') === false){
             $validator = Validator::make($request->all(), []);
             $validator->errors()->add('imageError', 'Upload a valid banner image');
@@ -62,7 +60,7 @@ class RecipesController extends Controller
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        $recipe = Recipe::findOrFail($id);
+        $recipe = Recipe::where('id', $id)->with('ingredients')->with('instructions')->get()[0];
         return view('recipes.view', ['recipe' => $recipe]);
     }
 
@@ -70,27 +68,44 @@ class RecipesController extends Controller
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return view('recipes.edit');
+        $recipe = Recipe::findOrFail($id);
+        return view('recipes.edit', ['recipe' => $recipe]);
     }
 
-    public function update($id){
+    public function update($id, Request $request){
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return "update recipe";
+        $recipe = Recipe::findOrFail($id);
+        $recipe->title = $request->input('title');
+        $recipe->description = $request->input('description');
+        $bannerImage = $request->file('image');
+        $extension = '';
+        $fileName = '';
+        $finalFileName = '';
+        $destinationPath = 'uploads';
+        if($bannerImage != NULL){
+            if(!(stripos($bannerImage->getMimeType(), 'image') === 0) || stripos($bannerImage->getMimeType(), 'image') === false){
+                $validator = Validator::make($request->all(), []);
+                $validator->errors()->add('imageError', 'Upload a valid banner image');
+                return redirect()->route('new.recipe')->withErrors($validator);
+            }
+            $extension = $bannerImage->getClientOriginalExtension();
+            $fileName = str_replace(".$extension", "", $bannerImage->getClientOriginalName());
+            $finalFileName = $fileName.'_'.strtotime("now").".$extension";
+            $bannerImage->move($destinationPath, $finalFileName);
+            $recipe->image = "/$destinationPath/$finalFileName";
+        }
+        $recipe->save();
+        return redirect()->route('show.recipe', $recipe->id);
     }
 
     public function delete($id){
         if(!session('userId')){
             return redirect()->route('loginForm');
         }
-        return view('recipes.delete');
-    }
-
-    public function destroy(){
-        if(!session('userId')){
-            return redirect()->route('loginForm');
-        }
-        return "destroy recipe";
+        $recipe = Recipe::findOrFail($id);
+        $recipe->delete();
+        return redirect()->route('recipes');
     }
 }

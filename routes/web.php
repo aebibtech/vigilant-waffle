@@ -48,7 +48,15 @@ Route::patch('/recipes/{id}', [RecipesController::class, 'update'])->name('updat
 Route::get('/recipes/delete/{id}', [RecipesController::class, 'delete'])->name('delete.recipe');
 Route::delete('/recipes/{id}', [RecipesController::class, 'destroy'])->name('destroy.recipe');
 
-// AJAX routes for ingredients and instructions
+// AJAX routes
 Route::get('/recipelist', [RecipesController::class, 'recipeList']);
-Route::get('/ingredients/{id}', [IngredientsController::class, 'getIngredients'])->name('ingredients');
-Route::get('/instructions/{id}', [InstructionsController::class, 'getInstructions'])->name('instructions');
+
+// Ingredient routes
+Route::post('/recipes/{id}/ingredients', [IngredientsController::class, 'store'])->name('store.ingredient');
+Route::patch('/recipes/{id}/ingredients/{ingId}', [IngredientsController::class, 'update'])->name('update.ingredient');
+Route::get('/recipes/{id}/ingredients/{ingId}/delete', [IngredientsController::class, 'delete'])->name('delete.ingredient');
+
+// Instruction routes
+Route::post('/recipes/{id}/instructions', [InstructionsController::class, 'store'])->name('store.instruction');
+Route::patch('/recipes/{id}/instructions/{insId}', [InstructionsController::class, 'update'])->name('update.instruction');
+Route::get('/recipes/{id}/instructions/{ingId}/delete', [InstructionsController::class, 'delete'])->name('delete.instruction');

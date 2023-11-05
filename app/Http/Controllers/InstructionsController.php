@@ -3,14 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Recipe;
 use App\Models\Instruction;
 
 class InstructionsController extends Controller
 {
-    public function getInstructions($id){
+    public function store($id, Request $request){
         if(session('userId') == NULL){
-            return "not authorized";
+            return redirect()->route('loginForm');
         }
-        return view('instructions.partials.list', ['instructions' => Instruction::where('recipe_id', $id)->orderBy('step_number', 'ASC')->get()]);
+        $recipe = Recipe::findOrFail($id);
+        $instruction = new Instruction;
+        $instruction->name = $request->input('name');
+        $instruction->description = $request->input('description');
+        $instruction->recipe_id = $recipe->id;
+        $instruction->save();
+        return redirect()->route('show.recipe', $recipe->id);
+    }
+
+    public function update($id, $insId, Request $request){
+        if(session('userId') == NULL){
+            return redirect()->route('loginForm');
+        }
+        $instruction = Instruction::findOrFail($insId);
+        $instruction->name = $request->input('name');
+        $instruction->description = $request->input('description');
+        $instruction->save();
+        return redirect()->route('show.recipe', $id);
+    }
+
+    public function delete($id, $ingId, Request $request){
+        if(session('userId') == NULL){
+            return redirect()->route('loginForm');
+        }
+        $instruction = Instruction::findOrFail($ingId);
+        $instruction->delete();
+        return redirect()->route('show.recipe', $id);
     }
 }
