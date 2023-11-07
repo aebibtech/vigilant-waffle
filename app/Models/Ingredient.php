@@ -12,7 +12,7 @@ class Ingredient extends Model
 
     public static $rules = [
         'name' => 'required|min:2',
-        'quantity' => 'required',
+        'quantity' => ['required', 'regex:/^(\d+(?:(?: \d+)*\/\d+)?)$/'],
         'unit' => 'required',
         'recipe_id' => 'required|numeric'
     ];

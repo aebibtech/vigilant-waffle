@@ -1,15 +1,15 @@
 @extends('layouts.recipes')
 @section('content')
-<section class="row g-2">
+<section class="container">
     <h1 class="d-flex justify-content-between">
         <span>{{ $recipe->title }}</span>
         <span>
-            <a class="btn btn-success" href="{{ route('edit.recipe', $recipe->id) }}">Edit</a>
+            <a class="btn btn-success" href="" data-bs-toggle="modal" data-bs-target="#editRecipeModal">Edit</a>
             <a class="btn btn-danger" href="{{ route('delete.recipe', $recipe->id) }}">Delete</a>
         </span>
     </h1>
-    <figure>
-        <img class="rounded border border-2 img-fluid" src="{{ $recipe->image }}" alt="{{ $recipe->title }}" height="480">
+    <figure class="row h-25">
+        <img class="card-img-top" src="{{ $recipe->image }}" alt="{{ $recipe->title }}">
         <figcaption class="text-center mt-3">{{ $recipe->description }}</figcaption>
     </figure>
     <hr>
@@ -21,7 +21,7 @@
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Unit</th>
-                <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +61,35 @@
     @endif
     <div><a class="btn btn-link text-decoration-none add-link" href="" data-bs-toggle="modal" data-bs-target="#addInstructionModal">+ Add Instruction</a></div>
 </section>
+
+<div class="modal fade" id="editRecipeModal" tabindex="-1" aria-labelledby="editRecipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editRecipeModalLabel">Edit Recipe</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('update.recipe', $recipe->id) }}" method="POST" id="recipeEditForm">
+                @method('PATCH')
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="title" id="title" placeholder="Recipe 1" value="{{ $recipe->title }}">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="description" id="description" placeholder="Delicious recipe" value="{{ $recipe->description }}">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="file" name="image" id="image" accept="image/*" capture="environment" value="{{ $recipe->image }}">    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-success" type="submit" value="Save">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="addIngredientModal" tabindex="-1" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -211,6 +240,7 @@
 <!--Toast-->
 <div class="toast fixed-top mx-auto bg-danger text-white" role="alert" data-animation="true" data-autohide="false" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
+        <div class="fw-bold">Errors</div>
         @foreach ($errors->all() as $error)
         <div>{{ $error }}</div>
         @endforeach
