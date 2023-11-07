@@ -35,6 +35,6 @@ class Recipe extends Model
     }
 
     public function instructions(){
-        return $this->hasMany(instruction::class);
+        return $this->hasMany(Instruction::class);
     }
 }

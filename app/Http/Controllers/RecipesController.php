@@ -16,7 +16,7 @@ class RecipesController extends Controller
     }
 
     public function recipeList(){
-        $recipes = Recipe::where('user_id', session('userId'))->get();
+        $recipes = Recipe::orderBy('created_at', 'DESC')->get();
         return view('recipes.partials.recipelist', ['recipes' => $recipes]);
     }
 
@@ -35,12 +35,12 @@ class RecipesController extends Controller
         if($bannerImage == NULL){
             $validator = Validator::make($request->all(), []);
             $validator->errors()->add('imageError', 'Upload a banner image');
-            return redirect()->route('new.recipe')->withErrors($validator);
+            return redirect()->route('recipes')->withErrors($validator);
         }
         if(!(stripos($bannerImage->getMimeType(), 'image') === 0) || stripos($bannerImage->getMimeType(), 'image') === false){
             $validator = Validator::make($request->all(), []);
             $validator->errors()->add('imageError', 'Upload a valid banner image');
-            return redirect()->route('new.recipe')->withErrors($validator);
+            return redirect()->route('recipes')->withErrors($validator);
         }
         $extension = $bannerImage->getClientOriginalExtension();
         $fileName = str_replace(".$extension", "", $bannerImage->getClientOriginalName());
