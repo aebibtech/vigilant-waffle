@@ -18,7 +18,7 @@ use App\Http\Controllers\InstructionsController;
 */
 
 Route::get('/', function(){
-    return redirect('/login');
+    return redirect()->route('recipes');
 });
 
 Route::get('/test-connection', function(){

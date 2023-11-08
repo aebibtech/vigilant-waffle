@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 class RecipesController extends Controller
 {
     public function index(){
-        if(!session('userId')){
-            return redirect()->route('loginForm');
-        }
         return view('recipes.index');
     }
 
@@ -59,9 +56,6 @@ class RecipesController extends Controller
     }
 
     public function show($id){
-        if(!session('userId')){
-            return redirect()->route('loginForm');
-        }
         $recipe = Recipe::where('id', $id)->with('ingredients')->with('instructions')->get()[0];
         return view('recipes.view', ['recipe' => $recipe]);
     }
