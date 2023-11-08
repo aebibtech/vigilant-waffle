@@ -26,10 +26,18 @@
                             </li>
                         </ul>
                         <div class="dropdown">
+                            @if (session('userId') != NULL)
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ session('username') }}</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ route('profile') }}">Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                             </ul>
+                            @else
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('loginForm') }}" aria-expanded="false">Login</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('registerForm') }}" aria-expanded="false">Register</a></li>
+                            </ul>
+                            @endif
                         </div>
                     </div>
                 </div>
