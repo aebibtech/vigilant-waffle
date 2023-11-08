@@ -50,6 +50,7 @@ Route::delete('/recipes/{id}', [RecipesController::class, 'destroy'])->name('des
 
 // AJAX routes
 Route::get('/recipelist', [RecipesController::class, 'recipeList']);
+Route::get('/search', [RecipesController::class, 'search'])->name('search.recipe');
 
 // Ingredient routes
 Route::post('/recipes/{id}/ingredients', [IngredientsController::class, 'store'])->name('store.ingredient');

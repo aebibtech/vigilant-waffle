@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use App\Models\Ingredient;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RecipesController extends Controller
 {
@@ -16,7 +18,7 @@ class RecipesController extends Controller
     }
 
     public function recipeList(){
-        $recipes = Recipe::where('user_id', session('userId'))->get();
+        $recipes = Recipe::orderBy('created_at', 'DESC')->get();
         return view('recipes.partials.recipelist', ['recipes' => $recipes]);
     }
 
@@ -35,12 +37,12 @@ class RecipesController extends Controller
         if($bannerImage == NULL){
             $validator = Validator::make($request->all(), []);
             $validator->errors()->add('imageError', 'Upload a banner image');
-            return redirect()->route('new.recipe')->withErrors($validator);
+            return redirect()->route('recipes')->withErrors($validator);
         }
         if(!(stripos($bannerImage->getMimeType(), 'image') === 0) || stripos($bannerImage->getMimeType(), 'image') === false){
             $validator = Validator::make($request->all(), []);
             $validator->errors()->add('imageError', 'Upload a valid banner image');
-            return redirect()->route('new.recipe')->withErrors($validator);
+            return redirect()->route('recipes')->withErrors($validator);
         }
         $extension = $bannerImage->getClientOriginalExtension();
         $fileName = str_replace(".$extension", "", $bannerImage->getClientOriginalName());
@@ -107,5 +109,17 @@ class RecipesController extends Controller
         $recipe = Recipe::findOrFail($id);
         $recipe->delete();
         return redirect()->route('recipes');
+    }
+
+    public function search(Request $request){
+        $searchTerm = $request->input('searchTerm');
+        $preparedValue = DB::raw("'%$searchTerm%'");
+        $results = Recipe::select('recipes.id', 'title', 'recipes.description', 'recipes.image')->join('ingredients', 'recipes.id', '=', 'ingredients.recipe_id')
+                        ->where('title', 'LIKE', $preparedValue)
+                        ->orWhere('description', 'LIKE', $preparedValue)
+                        ->orWhere('ingredients.name', 'LIKE', $preparedValue)
+                        ->distinct()
+                        ->get();
+        return view('recipes.partials.search', ['results' => $results]);
     }
 }

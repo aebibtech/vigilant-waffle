@@ -8,7 +8,7 @@ use App\Models\Recipe;
 
 class IngredientsController extends Controller
 {
-    public function store($id, $ingId, Request $request){
+    public function store($id, Request $request){
         if(session('userId') == NULL){
             return redirect()->route('loginForm');
         }
