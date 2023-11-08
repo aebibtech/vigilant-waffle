@@ -15,6 +15,7 @@
                         <textarea class="form-control" name="description" id="description" placeholder="Delicious recipe" rows="10"></textarea>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label" for="image">Upload Banner Image</label>
                         <input class="form-control" type="file" name="image" id="image" accept="image/*" capture="environment">
                     </div>
                 </div>

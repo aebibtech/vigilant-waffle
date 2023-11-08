@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use App\Models\Ingredient;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RecipesController extends Controller
 {
@@ -107,5 +109,17 @@ class RecipesController extends Controller
         $recipe = Recipe::findOrFail($id);
         $recipe->delete();
         return redirect()->route('recipes');
+    }
+
+    public function search(Request $request){
+        $searchTerm = $request->input('searchTerm');
+        $preparedValue = DB::raw("'%$searchTerm%'");
+        $results = Recipe::select('recipes.id', 'title', 'recipes.description', 'recipes.image')->join('ingredients', 'recipes.id', '=', 'ingredients.recipe_id')
+                        ->where('title', 'LIKE', $preparedValue)
+                        ->orWhere('description', 'LIKE', $preparedValue)
+                        ->orWhere('ingredients.name', 'LIKE', $preparedValue)
+                        ->distinct()
+                        ->get();
+        return view('recipes.partials.search', ['results' => $results]);
     }
 }

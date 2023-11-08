@@ -6,3 +6,8 @@
     height: 240px;
     object-fit: cover;
 }
+
+.search-results{
+    z-index: 999;
+    position: fixed;
+}

@@ -16,6 +16,7 @@
                         <input class="form-control" type="text" name="description" id="description" placeholder="Delicious recipe" value="{{ $recipe->description }}">
                     </div>
                     <div class="mb-3">
+                        <label class="form-label" for="image">Change Banner Image</label>
                         <input class="form-control" type="file" name="image" id="image" accept="image/*" capture="environment" value="{{ $recipe->image }}">    
                     </div>
                 </div>

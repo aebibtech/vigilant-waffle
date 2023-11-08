@@ -20,8 +20,8 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <form class="d-flex">
-                                    <input name="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <form class="d-flex" id="searchForm" action="{{ route('search.recipe') }}">
+                                    <input id="searchTerm" name="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                                 </form>
                             </li>
                         </ul>
@@ -39,5 +39,27 @@
             @yield('content')
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function(){
+                $('#searchForm').submit(function(e){
+                    e.preventDefault();
+                    var width = $(this).width(); var position = $(this).position(); var height = $('#searchForm').height();
+                    $.get($(this).attr('action') + '?' + $(this).serialize(), function(res){
+                        var results = $(res).css('width', width).css('top', height).css('left', position.left).addClass('mt-3 search-result');
+                        $('body').append(results);
+                    });
+                });
+                $('#searchTerm, body').on('change keyup click', function(){
+                    if($(this).val() != ''){
+                        $('.search-results').remove();
+                        $(this).parent().submit();
+                    }
+                    
+                    if($(this).prop('tagName') == 'BODY'){
+                        $('.search-results').remove();
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

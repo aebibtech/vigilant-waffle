@@ -77,68 +77,70 @@
     @endif
 </section>
 
-@include('recipes.edit')
-@include('ingredients.create')
-@include('ingredients.edit')
-@include('instructions.create')
-@include('instructions.edit')
+@if ($recipeOwner)
+    @include('recipes.edit')
+    @include('ingredients.create')
+    @include('ingredients.edit')
+    @include('instructions.create')
+    @include('instructions.edit')
 
-<script>
-    $(document).ready(function(){
-        $('.add-link').click(function(e){
+    <script>
+        $(document).ready(function(){
+            $('.add-link').click(function(e){
+                e.preventDefault();
+            });
+            $('form').submit(function(){
+                $(this).children('input[type="submit"]').html(
+                    $('<div>').addClass('spinner-border text-light').attr('role', 'status').append($('<span>').addClass('visually-hidden').text('Loading...'))
+                );
+                $(this).children('input[type="submit"]').attr('disabled', true);
+            });
+
+        });
+
+        $('.edit-ingredient-btn').click(function(e){
             e.preventDefault();
+            var parent = $(this).parent().parent();
+            var action = parent.attr('data-update');
+            console.log(parent.children(), action);
+            $('#nameEdit').val(parent.children()[0].textContent);
+            $('#quantityEdit').val(parent.children()[1].textContent);
+            $('#unitEdit').val(parent.children()[2].textContent);
+            $('#ingredientEditForm').attr('action', action);
+            var editModal = new bootstrap.Modal('#editIngredientModal');
+            editModal.show();
         });
-        $('form').submit(function(){
-            $(this).children('input[type="submit"]').html(
-                $('<div>').addClass('spinner-border text-light').attr('role', 'status').append($('<span>').addClass('visually-hidden').text('Loading...'))
-            );
-            $(this).children('input[type="submit"]').attr('disabled', true);
+
+        $('.edit-instruction-btn').click(function(e){
+            e.preventDefault();
+            var parent = $(this).parent().parent();
+            var action = parent.attr('data-update');
+            console.log(parent.children(), action);
+            $('#nameInstEdit').val(parent.children()[0].textContent);
+            $('#descriptionInstEdit').val(parent.children()[1].textContent);
+            $('#instructionEditForm').attr('action', action);
+            var editModal = new bootstrap.Modal('#editInstructionModal');
+            editModal.show();
         });
+    </script>
 
-    });
-
-    $('.edit-ingredient-btn').click(function(e){
-        e.preventDefault();
-        var parent = $(this).parent().parent();
-        var action = parent.attr('data-update');
-        console.log(parent.children(), action);
-        $('#nameEdit').val(parent.children()[0].textContent);
-        $('#quantityEdit').val(parent.children()[1].textContent);
-        $('#unitEdit').val(parent.children()[2].textContent);
-        $('#ingredientEditForm').attr('action', action);
-        var editModal = new bootstrap.Modal('#editIngredientModal');
-        editModal.show();
-    });
-
-    $('.edit-instruction-btn').click(function(e){
-        e.preventDefault();
-        var parent = $(this).parent().parent();
-        var action = parent.attr('data-update');
-        console.log(parent.children(), action);
-        $('#nameInstEdit').val(parent.children()[0].textContent);
-        $('#descriptionInstEdit').val(parent.children()[1].textContent);
-        $('#instructionEditForm').attr('action', action);
-        var editModal = new bootstrap.Modal('#editInstructionModal');
-        editModal.show();
-    });
-</script>
-
-@if ($errors->any())
-<!--Toast-->
-<div class="toast fixed-top mx-auto bg-danger text-white" role="alert" data-animation="true" data-autohide="false" aria-live="assertive" aria-atomic="true">
-    <div class="toast-body">
-        <div class="fw-bold">Errors</div>
-        @foreach ($errors->all() as $error)
-        <div>{{ $error }}</div>
-        @endforeach
+    @if ($errors->any())
+    <!--Toast-->
+    <div class="toast fixed-top mx-auto bg-danger text-white" role="alert" data-animation="true" data-autohide="false" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            <div class="fw-bold">Errors</div>
+            @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+            @endforeach
+        </div>
     </div>
-</div>
-<!--Toast End-->
-<script>
-    $(document).ready(function(){
-        var toast = new bootstrap.Toast($('.toast'));
-        toast.show();
-    });
-</script>
+    <!--Toast End-->
+    <script>
+        $(document).ready(function(){
+            var toast = new bootstrap.Toast($('.toast'));
+            toast.show();
+        });
+    </script>
+    @endif
 @endif
 @endsection
