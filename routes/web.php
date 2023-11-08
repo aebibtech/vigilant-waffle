@@ -37,6 +37,9 @@ Route::post('/login', [UsersController::class, 'login'])->name('login');
 Route::get('/register', [UsersController::class, 'registerForm'])->name('registerForm');
 Route::post('/register', [UsersController::class, 'register'])->name('register');
 Route::get('/logout', [UsersController::class, 'logout'])->name('logout');
+Route::get('/profile', [UsersController::class, 'profile'])->name('profile');
+Route::patch('/users/{id}', [UsersController::class, 'update'])->name('update.user');
+Route::patch('/users/password/{id}', [UsersController::class, 'updatePassword'])->name('update.password');
 
 // Recipe routes
 Route::get('/recipes', [RecipesController::class, 'index'])->name('recipes');
@@ -51,6 +54,7 @@ Route::delete('/recipes/{id}', [RecipesController::class, 'destroy'])->name('des
 // AJAX routes
 Route::get('/recipelist', [RecipesController::class, 'recipeList']);
 Route::get('/search', [RecipesController::class, 'search'])->name('search.recipe');
+Route::get('/recipetable', [RecipesController::class, 'recipeTable'])->name('table.recipes');
 
 // Ingredient routes
 Route::post('/recipes/{id}/ingredients', [IngredientsController::class, 'store'])->name('store.ingredient');

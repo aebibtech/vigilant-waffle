@@ -116,4 +116,9 @@ class RecipesController extends Controller
                         ->get();
         return view('recipes.partials.search', ['results' => $results]);
     }
+
+    public function recipeTable(Request $request){
+        $recipes = Recipe::where('user_id', $request->input('id'))->get();
+        return view('recipes.partials.recipetable', ['recipes' => $recipes]);
+    }
 }
