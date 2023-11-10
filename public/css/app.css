@@ -11,3 +11,11 @@
     z-index: 999;
     position: fixed;
 }
+
+.search-results .row:hover{
+    opacity: 0.7;
+}
+
+.collapse, .navbar-collapse{
+    z-index: 100!important;
+}

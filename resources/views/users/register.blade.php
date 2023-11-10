@@ -3,7 +3,7 @@
 <div class="d-flex justify-content-center">
     <form class="p-5 bg-light bg-gradient rounded border border-2" action="{{ route('register') }}" method="POST">
         @csrf
-        <h2 class="text-center mb-3">Register to Recipe Book</h2>
+        <h2 class="text-center mb-3">Register to <span style="font-family: 'Dancing Script', serif;">RecipeBook</span></h2>
         <div class="row mb-3">
             <div class="col"><input class="form-control" type="text" placeholder="Name" name="name"></div>
         </div>
